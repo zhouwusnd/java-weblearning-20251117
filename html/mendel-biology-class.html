@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>孟德尔的生物课 - 遗传学之父</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://storage.360buyimg.com/dist-dev/joycoder/fe-page-cdn/tailwindcss.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://storage.360buyimg.com/dist-dev/joycoder/fe-page-cdn/lucide.js"></script>
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        border: "hsl(214.3 31.8% 91.4%)",
+                        input: "hsl(214.3 31.8% 91.4%)",
+                        ring: "hsl(222.2 84% 4.9%)",
+                        background: "hsl(0 0% 100%)",
+                        foreground: "hsl(222.2 84% 4.9%)",
+                        primary: {
+                            DEFAULT: "hsl(222.2 47.4% 11.2%)",
+                            foreground: "hsl(210 40% 98%)",
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(210 40% 96%)",
+                            foreground: "hsl(222.2 84% 4.9%)",
+                        },
+                        destructive: {
+                            DEFAULT: "hsl(0 84.2% 60.2%)",
+                            foreground: "hsl(210 40% 98%)",
+                        },
+                        muted: {
+                            DEFAULT: "hsl(210 40% 96%)",
+                            foreground: "hsl(215.4 16.3% 46.9%)",
+                        },
+                        accent: {
+                            DEFAULT: "hsl(210 40% 96%)",
+                            foreground: "hsl(222.2 84% 4.9%)",
+                        },
+                        card: {
+                            DEFAULT: "hsl(0 0% 100%)",
+                            foreground: "hsl(222.2 84% 4.9%)",
+                        },
+                    },
+                    animation: {
+                        'dna-spin': 'dnaSpin 4s linear infinite',
+                        'pea-grow': 'peaGrow 2s ease-in-out infinite',
+                        'formula-float': 'formulaFloat 3s ease-in-out infinite',
+                        'teacher-gesture': 'teacherGesture 2s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        dnaSpin: {
+                            '0%': { transform: 'rotateY(0deg)' },
+                            '100%': { transform: 'rotateY(360deg)' },
+                        },
+                        peaGrow: {
+                            '0%, 100%': { transform: 'scale(1) translateY(0px)' },
+                            '50%': { transform: 'scale(1.1) translateY(-5px)' },
+                        },
+                        formulaFloat: {
+                            '0%, 100%': { transform: 'translateY(0px)', opacity: '0.8' },
+                            '50%': { transform: 'translateY(-10px)', opacity: '1' },
+                        },
+                        teacherGesture: {
+                            '0%, 100%': { transform: 'translateX(0px) rotate(0deg)' },
+                            '25%': { transform: 'translateX(5px) rotate(5deg)' },
+                            '75%': { transform: 'translateX(-5px) rotate(-5deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .dna-strand {
+            background: linear-gradient(45deg, 
+                rgba(34, 197, 94, 0.2) 0%, 
+                rgba(59, 130, 246, 0.2) 50%,
+                rgba(34, 197, 94, 0.2) 100%);
+        }
+        
+        .pea-pod {
+            background: linear-gradient(135deg, 
+                rgba(34, 197, 94, 0.8) 0%, 
+                rgba(22, 163, 74, 0.9) 100%);
+        }
+        
+        .blackboard {
+            background: linear-gradient(135deg, 
+                rgba(15, 23, 42, 0.95) 0%, 
+                rgba(30, 41, 59, 0.95) 100%);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .chalk-text {
+            color: #f1f5f9;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
+        }
+        
+        .mendel-beard {
+            fill: #6b7280;
+        }
+        
+        .mendel-coat {
+            fill: #374151;
+        }
+        
+        .experiment-table {
+            background: linear-gradient(180deg, 
+                rgba(139, 69, 19, 0.9) 0%, 
+                rgba(160, 82, 45, 0.9) 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50">
+    <div class="container mx-auto px-4 py-8">
+        <!-- 标题区域 -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4 flex items-center justify-center gap-3">
+                <i data-lucide="microscope" class="h-10 w-10 text-green-600"></i>
+                孟德尔的生物课
+            </h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                探索遗传学的奥秘，跟随格雷戈尔·孟德尔一起了解基因如何传递生命的特征。
+            </p>
+        </header>
+
+        <!-- 主要插图区域 -->
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-3xl shadow-2xl p-8 mb-8">
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-8">
+                    <!-- 孟德尔教学插图 -->
+                    <div class="flex-1 flex justify-center">
+                        <div class="relative">
+                            <!-- 教学场景SVG插图 -->
+                            <svg width="350" height="400" viewBox="0 0 350 400" class="animate-teacher-gesture cursor-pointer" id="mendel-illustration">
+                                <!-- 黑板背景 -->
+                                <rect x="50" y="50" width="250" height="150" rx="10" class="blackboard"/>
+                                
+                                <!-- 黑板上的遗传公式 -->
+                                <text x="75" y="85" class="chalk-text" font-size="16" font-family="serif">AA × aa → Aa</text>
+                                <text x="75" y="110" class="chalk-text" font-size="14" font-family="serif">3 : 1 比例</text>
+                                <text x="75" y="135" class="chalk-text" font-size="12" font-family="serif">显性 : 隐性</text>
+                                
+                                <!-- 黑板擦 -->
+                                <rect x="280" y="60" width="15" height="25" rx="2" fill="#8b5cf6"/>
+                                
+                                <!-- 实验桌 -->
+                                <rect x="0" y="350" width="350" height="50" class="experiment-table" rx="5"/>
+                                
+                                <!-- 孟德尔人物形象 -->
+                                <g transform="translate(175, 280)">
+                                    <!-- 身体 -->
+                                    <ellipse cx="0" cy="40" rx="40" ry="60" class="mendel-coat"/>
+                                    
+                                    <!-- 头部 -->
+                                    <circle cx="0" cy="-20" r="35" fill="#f4a261"/>
+                                    
+                                    <!-- 头发 -->
+                                    <path d="M -25 -45 Q 0 -55 25 -45 Q 20 -50 0 -50 Q -20 -50 -25 -45" fill="#8b4513"/>
+                                    
+                                    <!-- 胡须 -->
+                                    <path d="M -20 -10 Q 0 5 20 -10 Q 15 10 0 15 Q -15 10 -20 -10" class="mendel-beard"/>
+                                    
+                                    <!-- 眼睛 -->
+                                    <circle cx="-10" cy="-25" r="3" fill="#2d3436"/>
+                                    <circle cx="10" cy="-25" r="3" fill="#2d3436"/>
+                                    
+                                    <!-- 鼻子 -->
+                                    <circle cx="0" cy="-15" r="2" fill="#d97706"/>
+                                    
+                                    <!-- 嘴巴 -->
+                                    <path d="M -8 -5 Q 0 0 8 -5" stroke="#2d3436" stroke-width="2" fill="none"/>
+                                    
+                                    <!-- 手臂（教学手势） -->
+                                    <g transform="translate(-30, 10)">
+                                        <ellipse cx="0" cy="0" rx="8" ry="30" fill="#f4a261" transform="rotate(-45)"/>
+                                        <circle cx="-5" cy="-20" r="8" fill="#f4a261"/>
+                                    </g>
+                                    
+                                    <!-- 右手 -->
+                                    <g transform="translate(30, 10)">
+                                        <ellipse cx="0" cy="0" rx="8" ry="30" fill="#f4a261" transform="rotate(45)"/>
+                                        <circle cx="5" cy="-20" r="8" fill="#f4a261"/>
+                                    </g>
+                                </g>
+                                
+                                <!-- 豌豆植株 -->
+                                <g transform="translate(50, 300)">
+                                    <!-- 茎 -->
+                                    <line x1="0" y1="40" x2="0" y2="10" stroke="#22c55e" stroke-width="4"/>
+                                    
+                                    <!-- 叶子 -->
+                                    <ellipse cx="-10" cy="25" rx="15" ry="8" fill="#16a34a" transform="rotate(-30 -10 25)"/>
+                                    <ellipse cx="10" cy="20" rx="15" ry="8" fill="#16a34a" transform="rotate(30 10 20)"/>
+                                    
+                                    <!-- 豌豆荚 -->
+                                    <ellipse cx="0" cy="5" rx="8" ry="15" class="pea-pod animate-pea-grow"/>
+                                    <circle cx="-3" cy="2" r="2" fill="#fbbf24"/>
+                                    <circle cx="3" cy="5" r="2" fill="#fbbf24"/>
+                                    <circle cx="0" cy="8" r="2" fill="#fbbf24"/>
+                                </g>
+                                
+                                <!-- DNA双螺旋结构 -->
+                                <g transform="translate(280, 320)" class="animate-dna-spin">
+                                    <line x1="-10" y1="0" x2="-10" y2="-40" stroke="#3b82f6" stroke-width="3"/>
+                                    <line x1="10" y1="0" x2="10" y2="-40" stroke="#ef4444" stroke-width="3"/>
+                                    
+                                    <!-- 连接线 -->
+                                    <line x1="-10" y1="-8" x2="10" y1="-8" stroke="#6b7280" stroke-width="2"/>
+                                    <line x1="-10" y1="-16" x2="10" y1="-16" stroke="#6b7280" stroke-width="2"/>
+                                    <line x1="-10" y1="-24" x2="10" y1="-24" stroke="#6b7280" stroke-width="2"/>
+                                    <line x1="-10" y1="-32" x2="10" y1="-32" stroke="#6b7280" stroke-width="2"/>
+                                </g>
+                            </svg>
+                            
+                            <!-- 公式浮动效果 -->
+                            <div class="absolute top-4 right-4">
+                                <div class="bg-blue-100 rounded-full p-3 animate-formula-float">
+                                    <span class="text-blue-800 font-bold text-sm">Punnett Square</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 信息面板 -->
+                    <div class="flex-1 space-y-6">
+                        <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-6">
+                            <h3 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                                <i data-lucide="dna" class="h-6 w-6 text-green-600"></i>
+                                遗传学定律
+                            </h3>
+                            <ul class="space-y-3">
+                                <li class="flex items-center gap-3 text-gray-700">
+                                    <i data-lucide="check-circle" class="h-5 w-5 text-green-500"></i>
+                                    分离定律：等位基因分离
+                                </li>
+                                <li class="flex items-center gap-3 text-gray-700">
+                                    <i data-lucide="check-circle" class="h-5 w-5 text-green-500"></i>
+                                    自由组合定律：基因独立分配
+                                </li>
+                                <li class="flex items-center gap-3 text-gray-700">
+                                    <i data-lucide="check-circle" class="h-5 w-5 text-green-500"></i>
+                                    显性与隐性特征
+                                </li>
+                                <li class="flex items-center gap-3 text-gray-700">
+                                    <i data-lucide="check-circle" class="h-5 w-5 text-green-500"></i>
+                                    基因型与表现型
+                                </li>
+                                <li class="flex items-center gap-3 text-gray-700">
+                                    <i data-lucide="check-circle" class="h-5 w-5 text-green-500"></i>
+                                    纯合子与杂合子
+                                </li>
+<!-- 孟德尔对话气泡 -->
+        <div id="mendel-dialogue" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl border-2 border-green-200 p-6 max-w-md z-50 hidden">
+            <div class="flex items-start gap-4">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                        <i data-lucide="user" class="h-6 w-6 text-green-600"></i>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <div class="bg-green-50 rounded-lg p-4 relative">
+                        <div class="absolute -left-2 top-4 w-0 h-0 border-t-8 border-t-transparent border-r-8 border-r-green-50 border-b-8 border-b-transparent"></div>
+                        <p id="dialogue-text" class="text-gray-800 text-sm leading-relaxed"></p>
+                    </div>
+                    <div class="flex items-center gap-2 mt-3">
+                        <span class="text-xs text-gray-500">格雷戈尔·孟德尔</span>
+                        <span class="text-xs text-gray-400">遗传学之父</span>
+                    </div>
+                </div>
+            </div>
+            <button id="close-dialogue" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600 transition-colors">
+                <i data-lucide="x" class="h-5 w-5"></i>
+            </button>
+        </div>
+
+        <!-- 对话遮罩层 -->
+        <div id="dialogue-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                                <i data-lucide="calculator" class="h-6 w-6 text-blue-500"></i>
+                                经典比例
+                            </h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="text-center">
+                                    <div class="text-3xl font-bold text-green-600">3:1</div>
+                                    <div class="text-sm text-gray-600">显隐性比</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-3xl font-bold text-blue-600">1:2:1</div>
+                                    <div class="text-sm text-gray-600">基因型比</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 孟德尔实验卡片 -->
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl p-6 shadow-lg border border-green-100">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i data-lucide="seedling" class="h-8 w-8 text-green-500"></i>
+                        <h3 class="text-lg font-semibold text-gray-800">豌豆实验</h3>
+                    </div>
+                    <p class="text-gray-600 mb-3">通过豌豆杂交实验，发现了遗传的基本规律</p>
+                    <div class="text-sm text-green-600 font-medium">研究对象: 豌豆性状</div>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 shadow-lg border border-blue-100">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i data-lucide="users" class="h-8 w-8 text-blue-500"></i>
+                        <h3 class="text-lg font-semibold text-gray-800">杂交方法</h3>
+                    </div>
+                    <p class="text-gray-600 mb-3">人工授粉，控制亲本的交配过程</p>
+                    <div class="text-sm text-blue-600 font-medium">方法: 人工控制授粉</div>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 shadow-lg border border-purple-100">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i data-lucide="chart-bar" class="h-8 w-8 text-purple-500"></i>
+                        <h3 class="text-lg font-semibold text-gray-800">统计分析</h3>
+                    </div>
+                    <p class="text-gray-600 mb-3">用数学方法分析遗传性状的比例</p>
+                    <div class="text-sm text-purple-600 font-medium">工具: 统计学分析</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部提示 -->
+        <footer class="text-center mt-12 py-8">
+            <div class="inline-flex items-center gap-2 bg-white rounded-full px-6 py-3 shadow-lg">
+                <i data-lucide="lightbulb" class="h-5 w-5 text-yellow-500"></i>
+                <span class="text-gray-700">记住：科学发现源于仔细观察和严谨实验</span>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // 孟德尔对话系统
+        const mendelDialogues = [
+            "你好！我是格雷戈尔·孟德尔，遗传学之父。欢迎来到我的生物课堂！",
+            "你知道吗？我通过豌豆实验发现了遗传的基本规律。",
+            "在我的实验中，我发现性状会以3:1的比例分离。这是遗传学的基本原理！",
+            "每一个生物体都有两套基因，我们称之为等位基因。",
+            "显性基因会掩盖隐性基因的表现，但隐性基因并没有消失。",
+            "科学发现需要耐心和仔细观察，这是我最重要的经验。",
+            "我的研究在当时并不被理解，但多年后证明了遗传学的重要性。",
+            "记住，科学探索永无止境，保持好奇心！"
+        ];
+
+        let currentDialogueIndex = 0;
+
+        function showMendelDialogue() {
+            const dialogue = document.getElementById('mendel-dialogue');
+            const overlay = document.getElementById('dialogue-overlay');
+            const dialogueText = document.getElementById('dialogue-text');
+            
+            // 获取当前对话
+            const currentDialogue = mendelDialogues[currentDialogueIndex];
+            dialogueText.textContent = currentDialogue;
+            
+            // 显示对话
+            dialogue.classList.remove('hidden');
+            overlay.classList.remove('hidden');
+            
+            // 添加淡入动画
+            dialogue.style.opacity = '0';
+            dialogue.style.transform = 'translate(-50%, -50%) scale(0.8)';
+            
+            setTimeout(() => {
+                dialogue.style.transition = 'all 0.3s ease-out';
+                dialogue.style.opacity = '1';
+                dialogue.style.transform = 'translate(-50%, -50%) scale(1)';
+            }, 10);
+            
+            // 更新索引，循环显示
+            currentDialogueIndex = (currentDialogueIndex + 1) % mendelDialogues.length;
+        }
+
+        function hideMendelDialogue() {
+            const dialogue = document.getElementById('mendel-dialogue');
+            const overlay = document.getElementById('dialogue-overlay');
+            
+            // 添加淡出动画
+            dialogue.style.opacity = '0';
+            dialogue.style.transform = 'translate(-50%, -50%) scale(0.8)';
+            
+            setTimeout(() => {
+                dialogue.classList.add('hidden');
+                overlay.classList.add('hidden');
+                dialogue.style.transition = '';
+            }, 300);
+        }
+
+        // 初始化Lucide图标
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+            
+            // 添加孟德尔点击事件
+            const mendelIllustration = document.getElementById('mendel-illustration');
+            const closeDialogue = document.getElementById('close-dialogue');
+            const dialogueOverlay = document.getElementById('dialogue-overlay');
+            
+            // 点击孟德尔显示对话
+            mendelIllustration.addEventListener('click', showMendelDialogue);
+            
+            // 关闭对话
+            closeDialogue.addEventListener('click', hideMendelDialogue);
+            dialogueOverlay.addEventListener('click', hideMendelDialogue);
+            
+            // ESC键关闭对话
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    hideMendelDialogue();
+                }
+            });
+            
+            // 添加交互效果
+            const illustration = document.querySelector('.animate-teacher-gesture');
+            const peas = document.querySelectorAll('.pea-pod');
+            
+            illustration.addEventListener('mouseenter', function() {
+                this.style.animationDuration = '1s';
+            });
+            
+            illustration.addEventListener('mouseleave', function() {
+                this.style.animationDuration = '2s';
+            });
+            
+            // 豌豆点击效果
+            peas.forEach(pea => {
+                pea.addEventListener('click', function() {
+                    this.style.transform = 'scale(1.3)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 300);
+                });
+            });
+            
+            // 黑板点击效果
+            const blackboard = document.querySelector('.blackboard');
+            blackboard.addEventListener('click', function() {
+                const chalkTexts = this.querySelectorAll('.chalk-text');
+                chalkTexts.forEach((text, index) => {
+                    setTimeout(() => {
+                        text.style.opacity = text.style.opacity === '0.5' ? '1' : '0.5';
+                    }, index * 100);
+                });
+            });
+        });
+        
+        // 添加滚动动画
+        function animateOnScroll() {
+            const cards = document.querySelectorAll('.bg-white');
+            
+            cards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (cardTop < windowHeight * 0.8) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        }
+        
+        // 初始化卡片动画状态
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.bg-white');
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            });
+            
+            // 立即检查一次
+            animateOnScroll();
+        });
+        
+        window.addEventListener('scroll', animateOnScroll);
+        
+        // 添加DNA旋转控制
+        let dnaRotation = 0;
+        const dnaElement = document.querySelector('.animate-dna-spin');
+        
+        setInterval(() => {
+            dnaRotation += 90;
+            if (dnaElement) {
+                dnaElement.style.transform = `translate(280px, 320px) rotateY(${dnaRotation}deg)`;
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
